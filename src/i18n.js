@@ -1,38 +1,30 @@
+// src/i18n.js
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import Backend from 'i18next-http-backend';
 
-// Import translation files
+// Import your translations
 import en from './locales/en.json';
-import zh from './locales/zh.json';
 import es from './locales/es.json';
-import pt from './locales/pt.json';
-import hi from './locales/hi.json';
 import fr from './locales/fr.json';
+import zh from './locales/zh.json';
+import hi from './locales/hi.json';
 
+// Initialize i18n
 i18n
-  .use(Backend)
-  .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'en',
-    debug: true,
-    interpolation: {
-      escapeValue: false, // React already safes from XSS
-    },
     resources: {
       en: { translation: en },
-      zh: { translation: zh },
       es: { translation: es },
-      pt: { translation: pt },
-      hi: { translation: hi },
       fr: { translation: fr },
+      zh: { translation: zh },
+      hi: { translation: hi },
+    },
+    lng: 'en', // Default language
+    fallbackLng: 'en',
+    interpolation: {
+      escapeValue: false,
     },
   });
 
 export default i18n;
-
-
-
-

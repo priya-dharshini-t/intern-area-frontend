@@ -1,116 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+// src/Componets/Home/LanguageSelector.js
+import React, { useState } from 'react';
+import axios from 'axios';
 
-const LanguageSelector = () => {
-  const { i18n } = useTranslation();
-  const [language, setLanguage] = useState('');
-  const [backgroundColor, setBackgroundColor] = useState('white');
-  const [inputValue, setInputValue] = useState('');
+const LanguageSelector = ({ setSelectedLanguage, setOtpVerified }) => {
+  const [phoneNumber, setPhoneNumber] = useState('');
 
-  useEffect(() => {
-    switch (language) {
-      case 'hi':
-        setBackgroundColor('blue');
-        break;
-      case 'zh':
-        setBackgroundColor('green');
-        break;
-      case 'fr':
-        setBackgroundColor('yellow');
-        break;
-      default:
-        setBackgroundColor('white');
-    }
-    document.body.style.backgroundColor = backgroundColor;
-  }, [language, backgroundColor]);
+  const handleLanguageChange = async (event) => {
+    const newLanguage = event.target.value;
+    setSelectedLanguage(newLanguage);
 
-  const handleLanguageChange = (event) => {
-    const lng = event.target.value;
-    setLanguage(lng);
-    i18n.changeLanguage(lng);
-
-    if (lng === 'fr') {
-      // Request email if French is selected
-      const userEmail = prompt('Enter your email address:');
-      if (userEmail) {
-        setInputValue(userEmail);
-        sendOtpEmail(userEmail);
+    // For languages requiring OTP verification
+    if (newLanguage === 'fr' && phoneNumber) {
+      try {
+        await axios.post('http://localhost:5000/api/send-otp-sms', { phoneNumber });
+        setOtpVerified(true);
+      } catch (error) {
+        console.error('Error sending OTP:', error);
       }
     } else {
-      // Request phone number if not French
-      const userPhone = prompt('Enter your phone number:');
-      if (userPhone) {
-        setInputValue(userPhone);
-        sendOtpSMS(userPhone);
-      }
-    }
-  };
-
-  const sendOtpEmail = async (email) => {
-    try {
-      const response = await fetch('/api/send-otp-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      if (response.ok) {
-        alert('OTP sent to your email. Please check your inbox.');
-      } else {
-        const errorText = await response.text();
-        alert(`Failed to send OTP: ${errorText}`);
-      }
-    } catch (error) {
-      console.error('Error sending OTP email:', error);
-      alert('Failed to send OTP. Please try again.');
-    }
-  };
-
-  const sendOtpSMS = async (phoneNumber) => {
-    try {
-      const response = await fetch('/api/send-otp-sms', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ phoneNumber }),
-      });
-
-      if (response.ok) {
-        alert('OTP sent to your phone. Please check your messages.');
-      } else {
-        const errorText = await response.text();
-        alert(`Failed to send OTP: ${errorText}`);
-      }
-    } catch (error) {
-      console.error('Error sending OTP SMS:', error);
-      alert('Failed to send OTP. Please try again.');
+      setOtpVerified(true);
     }
   };
 
   return (
     <div>
-      <label htmlFor="language-select">{i18n.t('Select Language')}:</label>
-      <select id="language-select" value={language} onChange={handleLanguageChange}>
-        <option value="">{i18n.t('Select language')}</option>
+      <select onChange={handleLanguageChange}>
         <option value="en">English</option>
         <option value="hi">Hindi</option>
-        <option value="es">Spanish</option>
-        <option value="pt">Portuguese</option>
         <option value="zh">Chinese</option>
         <option value="fr">French</option>
+        {/* Add more languages here */}
       </select>
-      <input 
-        type="text"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        placeholder={language === 'fr' ? 'Enter your email' : 'Enter your phone number'}
-      />
+      {/* For OTP input, you may need to handle visibility based on language */}
+      {phoneNumber && <input type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />}
     </div>
   );
 };
 
 export default LanguageSelector;
-

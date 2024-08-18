@@ -1,12 +1,34 @@
-:root {
-  --bg-color: white;
+/* src/App.css */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
 }
 
 .App {
-  background-color: var(--bg-color);
+  text-align: center;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  
 }
 
+.App-header {
+  background-color: #282c34;
+  min-height: 1vh;
+  display: flex;
+  align-items:center;
+  justify-content:left;
+  color: rgb(9, 0, 0);
+}
+
+.App-content {
+  flex: 1;
   
+}
+
+.App-footer {
+  background-color: #282c34;
+  padding: 1rem;
+  color: white;
+}
+

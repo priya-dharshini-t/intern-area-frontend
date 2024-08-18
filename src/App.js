@@ -1,10 +1,11 @@
+// src/App.js
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { selectUser, login, logout } from './Feature/Userslice'; // Ensure these are correctly exported
+import { selectUser, login, logout } from './Feature/Userslice';
 import Home from './Componets/Home/Home';
 import Register from './Componets/auth/Register';
 import Navbar from './Componets/Navbar/Navbar';
@@ -66,26 +67,27 @@ function App() {
   useEffect(() => {
     if (otpVerified) {
       i18n.changeLanguage(selectedLanguage);
+      const body = document.querySelector('body');
       switch (selectedLanguage) {
         case 'hi':
-          document.documentElement.style.setProperty('--bg-color', 'blue');
+          body.style.backgroundColor = 'blue';
           break;
         case 'zh':
-          document.documentElement.style.setProperty('--bg-color', 'green');
+          body.style.backgroundColor = 'green';
           break;
         case 'fr':
-          document.documentElement.style.setProperty('--bg-color', 'yellow');
+          body.style.backgroundColor = 'yellow';
           break;
         default:
-          document.documentElement.style.setProperty('--bg-color', 'white');
+          body.style.backgroundColor = 'white';
       }
     }
   }, [selectedLanguage, otpVerified, i18n]);
 
   return (
-    <div className="App" style={{ backgroundColor: 'var(--bg-color)' }}>
+    <div className="App">
       <header className="App-header">
-        <LanguageSelector setSelectedLanguage={setSelectedLanguage} />
+        <LanguageSelector setSelectedLanguage={setSelectedLanguage} setOtpVerified={setOtpVerified} />
       </header>
       <Navbar />
       <Routes>
@@ -111,7 +113,6 @@ function App() {
 }
 
 export default App;
-
 
 
 
