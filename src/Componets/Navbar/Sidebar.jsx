@@ -116,8 +116,6 @@ function Sidebar() {
                         </div>
                     </>
                 )}
-
-                <p className='text-red-300'>Hire Talent</p>
             </div>
         </>
     );
