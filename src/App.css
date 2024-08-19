@@ -3,6 +3,7 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: var(--bg-color);
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 .App {
@@ -10,7 +11,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  
+  margin: 0;
+  padding: 0;
 }
 
 .App-header {
@@ -20,54 +22,32 @@ body {
   align-items:center;
   justify-content:left;
   color: rgb(9, 0, 0);
+  padding: 1rem;
+  width: 100%;
 }
 
 .App-content {
   flex: 1;
   padding: 1rem;
+  margin: 0 auto; /* Center content */
+  width: 100%;
+  max-width: 1200px; /* Optional: limit max width for large screens */
 }
 
 .App-footer {
   background-color: #282c34;
   padding: 1rem;
   color: white;
+  width: 100%;
+}
+/* Remove margin/padding issues */
+* {
+  box-sizing: border-box;
 }
 
-
-/* Media Queries */
-
-/* Styles for tablets and larger mobile devices */
-@media (min-width: 768px) {
-  .App-header {
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 0 2rem;
-  }
-
+/* Responsive adjustments */
+@media (max-width: 768px) {
   .App-content {
-    padding: 2rem;
-  }
-}
-
-/* Styles for laptops and larger screens */
-@media (min-width: 1024px) {
-  .App-header {
-    padding: 0 4rem;
-  }
-
-  .App-content {
-    padding: 2rem 4rem;
-  }
-}
-
-/* Styles for very small screens */
-@media (max-width: 480px) {
-  .App-header {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .App-content {
-    padding: 1rem;
+    padding: 0.5rem;
   }
 }

@@ -29,6 +29,8 @@ const LanguageSelector = ({ setSelectedLanguage, setOtpVerified }) => {
         <option value="hi">Hindi</option>
         <option value="zh">Chinese</option>
         <option value="fr">French</option>
+        <option value="es">Spanish</option>
+        <option value="pt">Porteguese</option>
         {/* Add more languages here */}
       </select>
       {/* For OTP input, you may need to handle visibility based on language */}
