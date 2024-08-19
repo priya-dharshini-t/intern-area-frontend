@@ -9,6 +9,7 @@ import { auth } from '../../firebase/firebase';
 
 function Sidebar() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [imagePreview, setImagePreview] = useState('');
     const navigate = useNavigate();
     const user = useSelector(selectUser);
 
@@ -34,6 +35,17 @@ function Sidebar() {
         };
     }, [sidebarOpen]);
 
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const logoutFunction = () => {
         signOut(auth);
         navigate("/");
@@ -43,52 +55,58 @@ function Sidebar() {
         <>
             <div className="App2 -mt-2 overflow-hidden">
                 <Link to="/">
-                    <img src={logo} alt="logo" id='nav2-img' />
+                    <img src={logo} alt="" id="nav2-img" />
                 </Link>
-
                 <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
                     <span className="cursor-pointer close-btn" onClick={closeSidebar}>
                         &times;
                     </span>
-
                     {user ? (
                         <div className="profile">
-                            <Link to="/profile">
-                                <img className='rounded-full justify-center' src={user.photo} alt="Profile" />
-                            </Link>
-                            <p className='text-center'>Profile name <span className='font-bold text-blue-500'>{user?.name}</span></p>
+                            <input type="file" accept="image/*" onChange={handleImageUpload} id="profile-upload" style={{ display: 'none' }} />
+                            <label htmlFor="profile-upload">
+                                <img
+                                    className='rounded-full cursor-pointer'
+                                    src={imagePreview || user.photo}
+                                    alt="Profile"
+                                />
+                            </label>
+                            <p className='text-center'>
+                                Profile name <span className='font-bold text-blue-500'>{user?.name}</span>
+                            </p>
                         </div>
                     ) : (
                         <div className="auth">
-                            <Link to="/login">Login</Link>
+                            <Link to="/register">
+                                <button className="btn4">Register</button>
+                            </Link>
                         </div>
                     )}
-
-                    <nav>
-                        <Link to="/internship">Internships</Link>
-                        <Link to="/Jobs">Jobs</Link>
-                        <Link to="/contact" className='small'>Contact Us</Link>
-                        <hr />
-                        {user ? (
-                            <div className="addmore">
-                                <Link to="/userapplication">
-                                    <p>My Applications</p>
-                                </Link>
-                                <Link to="/resume">
-                                    <p>View Resume</p>
-                                </Link>
-                                <Link to="/more">
-                                    <p>More</p>
-                                </Link>
-                                <button className='bt-log' id='bt' onClick={logoutFunction}>Logout <i className="bi bi-box-arrow-right"></i></button>
-                            </div>
-                        ) : (
-                            <div className="addmore">
-                                <Link to="/register-student"><p>Register - As a Student</p></Link>
-                                <Link to="/register-employer"><p>Register - As an Employer</p></Link>
-                            </div>
-                        )}
-                    </nav>
+                    <Link to="/internship">Internships</Link>
+                    <Link to="/Jobs">Jobs</Link>
+                    <Link to="/contact">Contact Us</Link>
+                    <hr />
+                    {user ? (
+                        <div className="addmore">
+                            <Link to="/userapplication">
+                                <p>My Applications</p>
+                            </Link>
+                            <Link to="/resume">
+                                <p>View Resume</p>
+                            </Link>
+                            <Link to="/more">
+                                <p>More</p>
+                            </Link>
+                            <button className='bt-log' id='bt' onClick={logoutFunction}>
+                                Logout <i className="bi bi-box-arrow-right"></i>
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="addmore">
+                            <p>Register- As a Student</p>
+                            <p>Register- As an Employer</p>
+                        </div>
+                    )}
                 </div>
 
                 <div className="main">
@@ -117,7 +135,6 @@ function Sidebar() {
                     </>
                 )}
 
-                <p className='text-red-300'>Hire Talent</p>
             </div>
         </>
     );
